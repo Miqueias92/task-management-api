@@ -19,10 +19,7 @@ export class TaskService {
   }
 
   update(id: string, task: TaskDto): TaskDto {
-    const foundTask = this.tasks.find((task) => task.id === id);
-    if (!foundTask) {
-      throw new NotFoundException(`Task with id ${id} not found`);
-    }
+    const foundTask = this.findById(id);
 
     foundTask.title = task.title;
     foundTask.description = task.description;
