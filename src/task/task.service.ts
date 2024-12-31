@@ -18,6 +18,10 @@ export class TaskService {
     return foundTask;
   }
 
+  findAll(): TaskDto[] {
+    return this.tasks;
+  }
+
   update(id: string, task: TaskDto): TaskDto {
     const foundTask = this.findById(id);
 
@@ -27,5 +31,9 @@ export class TaskService {
     foundTask.expirantionDate = task.expirantionDate;
 
     return foundTask;
+  }
+
+  delete(id: string) {
+    this.tasks = this.tasks.filter((task) => task.id !== id);
   }
 }
