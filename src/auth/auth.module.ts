@@ -3,9 +3,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
+    UsersModule,
     JwtModule.registerAsync({
       global: true,
       imports: [],
@@ -15,6 +17,7 @@ import { ConfigService } from '@nestjs/config';
           expiresIn: +configService.get<number>('JWT_EXPIRATION_TIME'),
         },
       }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
