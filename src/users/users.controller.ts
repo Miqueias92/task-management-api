@@ -7,17 +7,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() usersDto: UsersDto): UsersDto {
-    return this.usersService.create(usersDto);
-  }
-
-  @Get()
-  findAll(): UsersDto[] {
-    return this.usersService.findAll();
-  }
-
-  @Get('/:id')
-  findById(@Param('id') id: string): UsersDto {
-    return this.usersService.findById(id);
+  async create(@Body() usersDto: UsersDto): Promise<UsersDto> {
+    return await this.usersService.create(usersDto);
   }
 }

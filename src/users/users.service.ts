@@ -1,32 +1,48 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersDto } from './users.dto';
-import { v4 as uuid } from 'uuid';
 import { hashSync as bcryptHashSync } from 'bcrypt';
+import { User } from 'src/db/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private readonly users: UsersDto[] = [];
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-  create(usersDto: UsersDto): UsersDto {
-    usersDto.id = uuid();
-    usersDto.password = bcryptHashSync(usersDto.password, 10);
-    this.users.push(usersDto);
-    return usersDto;
-  }
-
-  findByUsername(username: string): UsersDto | null {
-    return this.users.find((user) => user.username === username);
-  }
-
-  findAll(): UsersDto[] {
-    return this.users;
-  }
-
-  findById(id: string): UsersDto {
-    const foundUser = this.users.find((user) => user.id === id);
-    if (!foundUser) {
-      throw new NotFoundException(`User with id ${id} not found`);
+  async create(usersDto: UsersDto): Promise<UsersDto> {
+    const foundUser = await this.findByUsername(usersDto.username);
+    if (foundUser) {
+      throw new ConflictException(
+        `User with username ${usersDto.username} already exists`,
+      );
     }
-    return foundUser;
+
+    const user = new User();
+    user.username = usersDto.username;
+    user.password = bcryptHashSync(usersDto.password, 10);
+
+    const { id, username, password } = await this.userRepository.save(user);
+    return { id, username, password };
+  }
+
+  async findByUsername(username: string): Promise<UsersDto | null> {
+    const foundUser = await this.userRepository.findOne({
+      where: { username },
+    });
+
+    if (!foundUser) return null;
+
+    return {
+      id: foundUser.id,
+      username: foundUser.username,
+      password: foundUser.password,
+    };
   }
 }
