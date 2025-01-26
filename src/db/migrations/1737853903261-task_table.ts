@@ -8,7 +8,7 @@ export class TaskTable1737853903261 implements MigrationInterface {
       title varchar(100) NOT NULL,
       description varchar(200) NOT NULL,
       status varchar(50) NOT NULL DEFAULT 'TODO',
-      expirantionDate TIMESTAMPTZ NOT NULL,
+      expirationDate TIMESTAMPTZ NOT NULL,
       CONSTRAINT pk_task_id PRIMARY KEY (id)
     );`);
   }

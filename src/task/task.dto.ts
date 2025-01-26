@@ -34,5 +34,5 @@ export class TaskDto {
   status: string;
 
   @IsDateString()
-  expirantionDate: Date;
+  expirationDate: Date;
 }

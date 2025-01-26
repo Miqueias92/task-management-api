@@ -14,6 +14,6 @@ export class Task {
   @Column({ type: 'varchar', length: 50, default: 'TODO' })
   status: string;
 
-  @Column({ type: 'timestamptz' })
-  expirantionDate: Date;
+  @Column({ type: 'timestamptz', name: 'expirationdate' })
+  expirationDate: Date;
 }

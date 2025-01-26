@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UsersDto } from './users.dto';
 import { hashSync as bcryptHashSync } from 'bcrypt';
 import { User } from 'src/db/entities/user.entity';
@@ -28,8 +24,8 @@ export class UsersService {
     user.username = usersDto.username;
     user.password = bcryptHashSync(usersDto.password, 10);
 
-    const { id, username, password } = await this.userRepository.save(user);
-    return { id, username, password };
+    const { id, username } = await this.userRepository.save(user);
+    return { id, username };
   }
 
   async findByUsername(username: string): Promise<UsersDto | null> {
