@@ -5,7 +5,7 @@ export class UserTable1737854479260 implements MigrationInterface {
     await queryRunner.query(`CREATE TABLE "user" (
           id uuid NOT NULL DEFAULT uuid_generate_v4(),
           username varchar(100) NOT NULL,
-          password varchar(200) NOT NULL,
+          password varchar(500) NOT NULL,
           CONSTRAINT pk_user_id PRIMARY KEY (id),
           CONSTRAINT uq_user_username UNIQUE (username)
         );`);
